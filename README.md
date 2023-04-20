@@ -1,5 +1,4 @@
 # NFT-claim-page
-## _The Last Markdown Editor, Ever_
 
 A simple claim page for NFT holders.
 
