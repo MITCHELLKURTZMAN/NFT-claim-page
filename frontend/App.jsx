@@ -1,49 +1,43 @@
-import React from "react"
-import logo from "./assets/dfinity.svg"
-/*
- * Connect2ic provides essential utilities for IC app development
- */
+import React, { useState } from "react";
+import "./index.css"
+import "@connect2ic/core/style.css"
+
 import { createClient } from "@connect2ic/core"
 import { defaultProviders } from "@connect2ic/core/providers"
-import { ConnectButton, ConnectDialog, Connect2ICProvider } from "@connect2ic/react"
-import "@connect2ic/core/style.css"
-/*
- * Import canister definitions like this:
- */
-import * as counter from "../.dfx/local/canisters/counter"
-/*
- * Some examples to get you started
- */
-import { Counter } from "./components/Counter"
-import { Transfer } from "./components/Transfer"
-import { Profile } from "./components/Profile"
-
+import { Connect2ICProvider } from "@connect2ic/react"
+import { Form } from "./components/Form"
+import { Login } from "./components/Login"
+ 
 function App() {
+  const [iiAddress, setIIAddress] = useState("");
+
+  const claimNFT = (event) => {
+    event.preventDefault();
+    if (!iiAddress || iiAddress.length  === 0) {
+      alert("You must enter your II address.")
+      return ;
+    } else if (iiAddress.length !== 64 ) {
+      alert("Please enter a valid II address. It must contain 64 characters.")
+    } else {
+      alert("thanks.")
+    }
+  }
 
   return (
     <div className="App">
+      <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
+      
+        <div className="auth-section">
+            <button class="py-2 px-5 rounded-full bg-gray-800 text-gray-100"> Sign out </button>
+        </div>
 
-      <div className="auth-section">
-        <ConnectButton />
-      </div>
-      <ConnectDialog />
+        <Form 
+          iiAddress={iiAddress}
+          setIIAddress={setIIAddress}
+          claimNFT={claimNFT} 
+        />
 
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="slogan">
-          React Template
-        </p>
-        <p className="twitter">by <a href="https://twitter.com/miamaruq">@miamaruq</a></p>
-      </header>
-
-      <p className="examples-title">
-        Examples
-      </p>
-      <div className="examples">
-        <Counter />
-        <Profile />
-        <Transfer />
-      </div>
+        <Login />
 
     </div>
   )
@@ -51,7 +45,7 @@ function App() {
 
 const client = createClient({
   canisters: {
-    counter,
+
   },
   providers: defaultProviders,
   globalProviderConfig: {
