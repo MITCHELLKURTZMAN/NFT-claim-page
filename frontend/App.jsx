@@ -4,12 +4,21 @@ import "@connect2ic/core/style.css"
 
 import { createClient } from "@connect2ic/core"
 import { defaultProviders } from "@connect2ic/core/providers"
-import { Connect2ICProvider } from "@connect2ic/react"
+import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react"
 import { Form } from "./components/Form"
-import { Login } from "./components/Login"
  
 function App() {
   const [iiAddress, setIIAddress] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const { isConnected, principal, activeProvider } = useConnect({
+    onConnect: () => {
+        setIsLoggedIn(true);
+    },
+    onDisconnect: () => {
+        setIsLoggedIn(false);
+    }
+  })
 
   const claimNFT = (event) => {
     event.preventDefault();
@@ -28,16 +37,17 @@ function App() {
       <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
       
         <div className="auth-section">
-            <button class="py-2 px-5 rounded-full bg-gray-800 text-gray-100"> Sign out </button>
+          <ConnectButton />
         </div>
+
+        <ConnectDialog />
 
         <Form 
           iiAddress={iiAddress}
           setIIAddress={setIIAddress}
           claimNFT={claimNFT} 
+          isLoggedIn={isLoggedIn}
         />
-
-        <Login />
 
     </div>
   )
