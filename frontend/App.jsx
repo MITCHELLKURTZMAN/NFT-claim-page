@@ -3,7 +3,11 @@ import "./index.css"
 import "@connect2ic/core/style.css"
 
 import { createClient } from "@connect2ic/core"
-import { defaultProviders } from "@connect2ic/core/providers"
+import { AstroX } from "@connect2ic/core/providers/astrox"
+import { InfinityWallet } from "@connect2ic/core/providers"
+import { NFID } from "@connect2ic/core/providers";
+import { PlugWallet } from "@connect2ic/core/providers/plug-wallet"
+import { StoicWallet  } from "@connect2ic/core/providers"
 import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react"
 import { Form } from "./components/Form"
  
@@ -67,7 +71,13 @@ const client = createClient({
   canisters: {
 
   },
-  providers: defaultProviders,
+  providers: [
+    new AstroX(),
+    new InfinityWallet(),
+    new NFID(),
+    new PlugWallet(),
+    new StoicWallet()
+  ],
   globalProviderConfig: {
     /*
      * Disables dev mode in production

@@ -23,9 +23,9 @@ const Form = ({
                 {isLoggedIn ? (
                     <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "32rem", height: "32rem" }}>
                         <div class="w-96">
-                            <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> NFT </h1>
+                            <h1 class="text-3xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-6 inline-flex" /> Tokens </h1>
                             
-                            <label class="text-purple-700 uppercase font-black">What to do</label>
+                            <label class="text-blue-800 uppercase font-black">What to do</label>
                             <p class="block text-sm font-medium text-gray-900"> 
                                 <span class="font-black text-gray-700">1.</span> Check that the following IDs are correct.
                             </p>
@@ -34,11 +34,11 @@ const Form = ({
                             </p>
                             <span onClick={() => setOpenModal(true)}
                                 class="block ml-5 text-xs font-semibold text-blue-600 hover:underline cursor-pointer"> 
-                                How do I find my Internet Identity Address?
+                                How do I find my Internet Identity Principal ID?
                             </span>
 
                             <div class="my-5 text-sm bg-blue-100 p-4 rounded-lg">
-                                <p class="block"> <span class="font-semibold uppercase">Account ID:</span> {accountID}</p>
+                                <p class="block"> <span class="font-semibold uppercase">Account number:</span> {accountID}</p>
                                 <p class="block"> <span class="font-semibold uppercase">Principal ID:</span> {principalID}</p>
 
                                 <span class="block mt-3 text-xs font-base"> 
@@ -63,9 +63,6 @@ const Form = ({
                                 </div>
                             </fieldset>
 
-
-
-                            
                             <form class="mb-3" onSubmit={claimNFT}>
                                 <div class="mb-3">
                                     <input 
@@ -78,7 +75,7 @@ const Form = ({
                                 </div>
                                 <div class="mb-3">
                                     <button type="submit"
-                                    class="mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md">
+                                    class="mb-1.5 block w-full text-center text-white bg-gray-900 hover:ring-2 px-2 py-1.5 rounded-md">
                                     Submit!
                                     </button>
                                 </div>
@@ -87,10 +84,10 @@ const Form = ({
                     </div> 
                 ) : ( 
                     <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "32rem", height: "32rem" }}>
-                        <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> NFT </h1>
+                        <h1 class="text-3xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-6 inline-flex" /> Tokens </h1>
                         <h1 class="text-2xl font-bold mb-8"> Please connect to continue. </h1>
                         <div class="flex items-center justify-center w-full">
-                            <ConnectButton />
+                            <ConnectButton style={{width: "310px", justifyContent: "center"}}/>
                         </div>
                     </div>
                 )}
@@ -98,8 +95,8 @@ const Form = ({
             </div>
             <Modal trigger={openModal} setTrigger={setOpenModal}>
                 <div class="text-md">
-                    <h1 class="text-purple-700 uppercase text-xl font-black mb-3">
-                        How to find your Internet Identity Address
+                    <h1 class="text-blue-800 uppercase text-lg font-black mb-3">
+                        How to find your Internet Identity Principal ID
                     </h1>
 
                     <p class="block font-medium text-gray-900 my-3"> 
@@ -113,13 +110,13 @@ const Form = ({
                     <p class="block font-medium text-gray-900 mb-1.5"> 
                         <span class="font-black text-gray-700">2.</span> Click the 'My Canisters' tab on the lefthand sidebar.
                     </p>
-                    <img src={step2} class="mb-3 h-60 border border-gray-300 shadow-md" />
+                    <img src={step2} class="mb-5 h-60 border border-gray-300 shadow-md rounded-xl" />
 
                     <p class="block font-medium text-gray-900 mb-1.5"> 
                         <span class="font-black text-gray-700">3.</span> Copy your principal under your 'Internet Computer' canister. 
-                        <span class="block ml-5">This is your Internet Identity Address.</span>
+                        <span class="block ml-5">This is your Internet Identity Principal ID.</span>
                     </p>
-                    <img src={step3} class="mb-3 h-60 border border-gray-300 shadow-md" />
+                    <img src={step3} class="mb-3 h-60 border border-gray-300 shadow-md rounded-xl" />
                 </div>
             </Modal>
         </div>
