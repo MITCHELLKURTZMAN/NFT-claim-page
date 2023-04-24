@@ -23,18 +23,24 @@ function App() {
   const claimNFT = (event) => {
     event.preventDefault();
     const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
-    
+    const confirmCheckbox = document.getElementById("confirm");
+  
+    if (!confirmCheckbox.checked) {
+      alert("Please confirm that the addresses are correct.");
+      return;
+    }
+  
     if (!iiAddress || iiAddress.length === 0) {
-      alert("You must enter your II address.");
+      alert("You cannot leave this field blank.");
       return;
     } else if (!iiAddressRegex.test(iiAddress)) {
-      alert("Please enter a valid II address in the correct format.");
+      alert("Please enter a valid principal in the correct format.");
       return;
     } else {
       alert("Thanks.");
-      // Do something else with the valid iiAddress
+      // Do something 
     }
-  }  
+  }
 
   return (
     <div className="App">
