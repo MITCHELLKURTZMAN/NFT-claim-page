@@ -1,20 +1,24 @@
-import React, { useState } from "react"
-import { ConnectButton } from "@connect2ic/react"
-import Modal from "./Modal.jsx"
-import kinicLogo from "../assets/kinic.svg"
-import step2 from "../assets/step2.png"
-import step3 from "../assets/step3.png"
+import React, { useState } from "react";
+import { ConnectButton } from "@connect2ic/react";
+import { useWallet } from "@connect2ic/react";
+import { useBalance } from "@connect2ic/react";
+import Modal from "./Modal.jsx";
+import kinicLogo from "../assets/kinic.svg";
+import step2 from "../assets/step2.png";
+import step3 from "../assets/step3.png";
 
 const Form = ({ 
     iiAddress,
     setIIAddress,
     claimNFT,
-    isLoggedIn,
+    isLoggedIn
   }) => {
 
     const [accountID, setAccountID] = useState("1234");
     const [principalID, setPrincipalID] = useState("123abc");
     const [openModal, setOpenModal] = useState(false);
+    const [wallet] = useWallet();
+    const [assets, { refetch, error }] = useBalance();
   
     return (
         <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 py-10">
@@ -29,7 +33,7 @@ const Form = ({
                             
                             <p class="block text-sm font-medium text-gray-900 mb-2"> 
                                 <span class="font-black text-gray-700">1.</span> &nbsp;
-                                Your account number and principal ID are displayed inside the blue box. 
+                                Your wallet account number and principal ID are displayed in the blue box below. 
                                 Click the checkbox to confirm that they are correct.
                             </p>
                             <p class="block text-sm font-medium text-gray-900"> 
@@ -46,7 +50,7 @@ const Form = ({
                                 <p class="block"> <span class="font-bold uppercase">Principal ID:</span> {principalID}</p>
 
                                 <span class="block mt-3 text-xs font-base"> 
-                                    If the above is incorrect, please contact us on our Twitter page:&nbsp;
+                                    If the above is incorrect, please contact us on our Twitter page: <br/>
                                     <a href="https://twitter.com/kinic_app" target="blank" 
                                         class="font-semibold text-blue-600 hover:underline cursor-pointer">
                                         https://twitter.com/kinic_app
@@ -111,12 +115,12 @@ const Form = ({
                         </a>
                     </p>
 
-                    <p class="block font-medium text-gray-900 mb-1.5"> 
+                    <p class="block font-medium text-gray-900 mb-2"> 
                         <span class="font-black text-gray-700">2.</span> Click the 'My Canisters' tab on the lefthand sidebar.
                     </p>
                     <img src={step2} class="mb-5 h-60 border border-gray-300 shadow-md rounded-xl" />
 
-                    <p class="block font-medium text-gray-900 mb-1.5"> 
+                    <p class="block font-medium text-gray-900 mb-2"> 
                         <span class="font-black text-gray-700">3.</span> Copy your principal under your 'Internet Computer' canister. 
                         <span class="block ml-5">This is your Internet Identity Principal ID.</span>
                     </p>

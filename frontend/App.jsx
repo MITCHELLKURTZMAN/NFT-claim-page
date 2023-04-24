@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import "./index.css"
-import "@connect2ic/core/style.css"
+import "./index.css";
+import "@connect2ic/core/style.css";
 
-import { createClient } from "@connect2ic/core"
-import { AstroX } from "@connect2ic/core/providers/astrox"
-import { InfinityWallet } from "@connect2ic/core/providers"
+import { createClient } from "@connect2ic/core";
+import { AstroX } from "@connect2ic/core/providers/astrox";
+import { InfinityWallet } from "@connect2ic/core/providers";
 import { NFID } from "@connect2ic/core/providers";
-import { PlugWallet } from "@connect2ic/core/providers/plug-wallet"
-import { StoicWallet  } from "@connect2ic/core/providers"
-import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react"
-import { Form } from "./components/Form"
+import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
+import { StoicWallet  } from "@connect2ic/core/providers";
+import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react";
+import { Form } from "./components/Form";
  
 function App() {
   const [iiAddress, setIIAddress] = useState("");
@@ -17,7 +17,7 @@ function App() {
 
   const { isConnected, principal, activeProvider } = useConnect({
     onConnect: () => {
-        setIsLoggedIn(true);
+        setIsLoggedIn(true);        
     },
     onDisconnect: () => {
         setIsLoggedIn(false);
