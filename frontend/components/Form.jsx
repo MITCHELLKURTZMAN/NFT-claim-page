@@ -15,7 +15,7 @@ const Form = ({
         {isLoggedIn ? (
     
             <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "32rem", height: "32rem" }}>
-                <div class="w-72">
+                <div class="w-96">
                     <h1 class="text-3xl font-bold"> Claim your NFT </h1>
                     <small class="text-gray-400"> Enter your II Address below to claim ownership. </small>
 
@@ -25,7 +25,7 @@ const Form = ({
                             <input 
                             value={iiAddress} 
                             onChange={(event) => setIIAddress(event.target.value)}
-                            placeholder="12345" 
+                            placeholder="e.g. t2qha-mm9vy-i4bqr-xo7ga-s3tvo-xob2s-sb8m1-ti7lq-tydak-w5q3v-bsd" 
                             class="block w-full rounded-md border border-gray-300 focus:border-purple-700 
                                 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" 
                             />
