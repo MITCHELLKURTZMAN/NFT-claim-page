@@ -22,15 +22,19 @@ function App() {
 
   const claimNFT = (event) => {
     event.preventDefault();
-    if (!iiAddress || iiAddress.length  === 0) {
-      alert("You must enter your II address.")
-      return ;
-    } else if (iiAddress.length !== 64 ) {
-      alert("Please enter a valid II address. It must contain 64 characters.")
+    const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
+    
+    if (!iiAddress || iiAddress.length === 0) {
+      alert("You must enter your II address.");
+      return;
+    } else if (!iiAddressRegex.test(iiAddress)) {
+      alert("Please enter a valid II address in the correct format.");
+      return;
     } else {
-      alert("thanks.")
+      alert("Thanks.");
+      // Do something else with the valid iiAddress
     }
-  }
+  }  
 
   return (
     <div className="App">
