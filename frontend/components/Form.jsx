@@ -21,28 +21,32 @@ const Form = ({
             <div class="flex shadow-lg rounded-lg z-50"> 
 
                 {isLoggedIn ? (
-                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "32rem", height: "32rem" }}>
-                        <div class="w-96">
-                            <h1 class="text-3xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-6 inline-flex" /> Tokens </h1>
+                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "38rem", height: "38rem" }}>
+                        <div class="w-full p-20">
+                            <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> Tokens </h1>
                             
-                            <label class="text-blue-800 uppercase font-black">What to do</label>
-                            <p class="block text-sm font-medium text-gray-900"> 
-                                <span class="font-black text-gray-700">1.</span> Check that the following IDs are correct.
+                            <label class="text-blue-800 text-lg uppercase font-black">What to do</label>
+                            
+                            <p class="block text-sm font-medium text-gray-900 mb-2"> 
+                                <span class="font-black text-gray-700">1.</span> &nbsp;
+                                Your account number and principal ID are displayed inside the blue box. 
+                                Click the checkbox to confirm that they are correct.
                             </p>
                             <p class="block text-sm font-medium text-gray-900"> 
-                                <span class="font-black text-gray-700">2.</span> Enter your Internet Identity Address and click Submit!
+                                <span class="font-black text-gray-700">2.</span> &nbsp;
+                                Enter your Internet Identity Principal ID and click Submit!
                             </p>
                             <span onClick={() => setOpenModal(true)}
-                                class="block ml-5 text-xs font-semibold text-blue-600 hover:underline cursor-pointer"> 
+                                class="block text-xs font-semibold text-blue-600 hover:underline cursor-pointer"> 
                                 How do I find my Internet Identity Principal ID?
                             </span>
 
                             <div class="my-5 text-sm bg-blue-100 p-4 rounded-lg">
-                                <p class="block"> <span class="font-semibold uppercase">Account number:</span> {accountID}</p>
-                                <p class="block"> <span class="font-semibold uppercase">Principal ID:</span> {principalID}</p>
+                                <p class="block"> <span class="font-bold uppercase">Account number:</span> {accountID}</p>
+                                <p class="block"> <span class="font-bold uppercase">Principal ID:</span> {principalID}</p>
 
                                 <span class="block mt-3 text-xs font-base"> 
-                                    If these are not your IDs, please contact us on our Twitter page:&nbsp;
+                                    If the above is incorrect, please contact us on our Twitter page:&nbsp;
                                     <a href="https://twitter.com/kinic_app" target="blank" 
                                         class="font-semibold text-blue-600 hover:underline cursor-pointer">
                                         https://twitter.com/kinic_app
@@ -83,8 +87,8 @@ const Form = ({
                         </div>
                     </div> 
                 ) : ( 
-                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "32rem", height: "32rem" }}>
-                        <h1 class="text-3xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-6 inline-flex" /> Tokens </h1>
+                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "38rem", height: "38rem" }}>
+                        <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> Tokens </h1>
                         <h1 class="text-2xl font-bold mb-8"> Please connect to continue. </h1>
                         <div class="flex items-center justify-center w-full">
                             <ConnectButton style={{width: "310px", justifyContent: "center"}}/>
