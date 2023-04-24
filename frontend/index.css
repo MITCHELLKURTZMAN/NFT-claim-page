@@ -36,14 +36,18 @@ body {
 .popup-inner .close-btn {
     position: absolute;
     top: 10px;
-    right: 20px;
-    padding: 5px;
+    right: 10px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 0px;
+    padding-bottom: 2px;
     font-weight: 600;
-    background-color: transparent;
+    background-color: rgb(34, 34, 34);
     outline: 0;
     border: 0;
+    border-radius: 9999px;
     font-size: 25px;
-    color: #424242;
+    color: #f1f1f1;
     cursor: pointer;
 }
 
