@@ -51,6 +51,11 @@ body {
     cursor: pointer;
 }
 
+.popup-inner .close-btn:hover {
+    transform: scale(1.03);
+    transition: all 0.4s;
+}
+
 #kani {
     background-color: #ffffff;
     -webkit-text-size-adjust: 100%;

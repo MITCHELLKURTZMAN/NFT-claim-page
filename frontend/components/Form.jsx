@@ -37,13 +37,21 @@ const Form = ({
                                 How do I find my Internet Identity Address?
                             </span>
 
-                            <div class="my-5 text-sm bg-blue-100 p-5 rounded-lg">
+                            <div class="my-5 text-sm bg-blue-100 p-4 rounded-lg">
                                 <p class="block"> <span class="font-semibold uppercase">Account ID:</span> {accountID}</p>
                                 <p class="block"> <span class="font-semibold uppercase">Principal ID:</span> {principalID}</p>
+
+                                <span class="block mt-3 text-xs font-base"> 
+                                    If these are not your IDs, please contact us on our Twitter page:&nbsp;
+                                    <a href="https://twitter.com/kinic_app" target="blank" 
+                                        class="font-semibold text-blue-600 hover:underline cursor-pointer">
+                                        https://twitter.com/kinic_app
+                                    </a>
+                                </span>
                             </div>
 
-                            <fieldset class="mb-1">
-                                <div class="flex items-center items-start mb-4">
+                            <fieldset>
+                                <div class="flex items-center items-start mb-5">
                                     <input 
                                         id="confirm" 
                                         type="checkbox" 
@@ -54,6 +62,9 @@ const Form = ({
                                     </label>
                                 </div>
                             </fieldset>
+
+
+
                             
                             <form class="mb-3" onSubmit={claimNFT}>
                                 <div class="mb-3">
