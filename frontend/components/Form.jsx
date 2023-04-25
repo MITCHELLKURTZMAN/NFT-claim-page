@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { ConnectButton } from "@connect2ic/react";
-import { useWallet } from "@connect2ic/react";
-import { useBalance } from "@connect2ic/react";
 import Modal from "./Modal.jsx";
 import kinicLogo from "../assets/kinic.svg";
 import step2 from "../assets/step2.png";
@@ -11,26 +9,23 @@ const Form = ({
     iiAddress,
     setIIAddress,
     claimNFT,
-    isLoggedIn
+    isLoggedIn, 
+    accountNbr, 
+    principalID
   }) => {
 
-    const [accountID, setAccountID] = useState("1234");
-    const [principalID, setPrincipalID] = useState("123abc");
     const [openModal, setOpenModal] = useState(false);
-    const [wallet] = useWallet();
-    const [assets, { refetch, error }] = useBalance();
   
     return (
         <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 py-10">
             <div class="flex shadow-lg rounded-lg z-50"> 
 
                 {isLoggedIn ? (
-                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "38rem", height: "38rem" }}>
+                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "46rem", height: "44rem" }}>
                         <div class="w-full p-20">
-                            <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> Tokens </h1>
+                            <h1 class="text-5xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-8 inline-flex" /> Tokens </h1>
                             
                             <label class="text-blue-800 text-lg uppercase font-black">What to do</label>
-                            
                             <p class="block text-sm font-medium text-gray-900 mb-2"> 
                                 <span class="font-black text-gray-700">1.</span> &nbsp;
                                 Your wallet account number and principal ID are displayed in the blue box below. 
@@ -45,12 +40,14 @@ const Form = ({
                                 How do I find my Internet Identity Principal ID?
                             </span>
 
-                            <div class="my-5 text-sm bg-blue-100 p-4 rounded-lg">
-                                <p class="block"> <span class="font-bold uppercase">Account number:</span> {accountID}</p>
-                                <p class="block"> <span class="font-bold uppercase">Principal ID:</span> {principalID}</p>
+                            <div class="my-5 text-sm bg-blue-100 p-6 rounded-lg">
+                                <p class="block uppercase font-bold"> Account Number</p>
+                                <p class="block mb-3 font-medium">{accountNbr}</p>
+                                <p class="block uppercase font-bold"> Principal ID</p>
+                                <p class="block font-medium">{principalID}</p>
 
-                                <span class="block mt-3 text-xs font-base"> 
-                                    If the above is incorrect, please contact us on our Twitter page: <br/>
+                                <span class="block mt-5 text-xs font-base"> 
+                                    If the above is incorrect, please contact us on Twitter:&nbsp;
                                     <a href="https://twitter.com/kinic_app" target="blank" 
                                         class="font-semibold text-blue-600 hover:underline cursor-pointer">
                                         https://twitter.com/kinic_app
@@ -66,7 +63,7 @@ const Form = ({
                                         class="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded" 
                                     />
                                     <label for="confirm" class="text-sm ml-3 font-medium text-gray-900">
-                                        I confirm that the above addresses are correct.
+                                        I confirm that the above information is correct.
                                     </label>
                                 </div>
                             </fieldset>
@@ -78,21 +75,21 @@ const Form = ({
                                         onChange={(event) => setIIAddress(event.target.value)}
                                         placeholder="Enter your Internet Identity Address here." 
                                         class="block w-full rounded-md border border-gray-300 focus:border-purple-700 
-                                            focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" 
+                                        focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" 
                                     />
                                 </div>
                                 <div class="mb-3">
                                     <button type="submit"
-                                    class="mb-1.5 block w-full text-center text-white bg-gray-900 hover:ring-2 px-2 py-1.5 rounded-md">
-                                    Submit!
+                                        class="mb-1.5 block w-full text-center text-white bg-gray-900 hover:ring-2 px-2 py-1.5 rounded-md">
+                                        Submit!
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div> 
                 ) : ( 
-                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "38rem", height: "38rem" }}>
-                        <h1 class="text-4xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-7 inline-flex" /> Tokens </h1>
+                    <div class="flex flex-wrap content-center justify-center rounded-lg bg-white" style={{ width: "46rem", height: "44rem" }}>
+                        <h1 class="text-5xl font-bold mb-5"> Claim your <img src={kinicLogo} class="mb-2 h-8 inline-flex" /> Tokens </h1>
                         <h1 class="text-2xl font-bold mb-8"> Please connect to continue. </h1>
                         <div class="flex items-center justify-center w-full">
                             <ConnectButton style={{width: "310px", justifyContent: "center"}}/>
@@ -103,9 +100,7 @@ const Form = ({
             </div>
             <Modal trigger={openModal} setTrigger={setOpenModal}>
                 <div class="text-md">
-                    <h1 class="text-blue-800 uppercase text-lg font-black mb-3">
-                        How to find your Internet Identity Principal ID
-                    </h1>
+                    <h1 class="text-blue-800 uppercase text-lg font-black mb-3"> How to find your Internet Identity Principal ID </h1>
 
                     <p class="block font-medium text-gray-900 my-3"> 
                         <span class="font-black text-gray-700">1.</span> Sign in to your NNS Account here: 

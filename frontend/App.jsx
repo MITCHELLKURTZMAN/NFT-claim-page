@@ -1,28 +1,74 @@
-import React, { useState } from "react";
-import "./index.css";
+import React, { useState, useEffect } from "react";
 import "@connect2ic/core/style.css";
+import "./index.css";
 
+import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react";
 import { createClient } from "@connect2ic/core";
 import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
 import { NFID } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { StoicWallet  } from "@connect2ic/core/providers";
-import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react";
 import { Form } from "./components/Form";
+import { Principal } from "@dfinity/principal";
+import { getCrc32 } from "@dfinity/principal/lib/cjs/utils/getCrc.js";
+import { sha224 } from "@dfinity/principal/lib/cjs/utils/sha224.js";
+import { Buffer } from 'buffer';
  
 function App() {
-  const [iiAddress, setIIAddress] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [accountNbr, setAccountNbr] = useState("");
+  const [principalID, setPrincipalID] = useState("");
+  const [iiAddress, setIIAddress] = useState("");
 
   const { isConnected, principal, activeProvider } = useConnect({
     onConnect: () => {
-        setIsLoggedIn(true);        
+        setIsLoggedIn(true); 
     },
     onDisconnect: () => {
         setIsLoggedIn(false);
     }
-  })
+  });
+
+  useEffect(() => {
+    if (principal) {
+      setPrincipalID(principal.replace(/"/g, ''));
+      setAccountNbr(firstAccountOfPrincipal(Principal.fromText(principal)).replace(/"/g, ''));
+    }
+  }, [principal]);  
+  
+  const addCrc32 = (buf) => {
+    const crc32Buf = Buffer.alloc(4);
+    crc32Buf.writeUInt32BE(getCrc32(buf), 0);
+    return Buffer.concat([crc32Buf, buf]);
+  };
+  
+  const accountIdentifierFromSubaccount = (principal, subaccount) => {
+    const preimage = Buffer.concat([
+      Buffer.from("\x0Aaccount-id"),
+      principal,
+      subaccount,
+    ]);
+    const hashed = Buffer.from(sha224(preimage));
+    return addCrc32(hashed).toString("hex");
+  };
+  
+  const firstAccountOfPrincipal = (principal) => {
+    let accountNumber = accountIdentifierFromSubaccount( 
+      Buffer.from(principal.toUint8Array()),
+      Buffer.from(Array(32).fill(0))
+    );
+    return accountNumber;
+  };
+  
+  const padSubaccountArray = (arg) =>
+    arg.concat(Array(32 - arg.length).fill(0));
+  
+  const makeCanisterIdSubaccount = (canisterId) => {
+    let arr = Array.from(Principal.fromText(canisterId).toUint8Array());
+    arr = [arr.length].concat(arr);
+    return padSubaccountArray(arr);
+  };
 
   const claimNFT = (event) => {
     event.preventDefault();
@@ -44,25 +90,23 @@ function App() {
       alert("Thanks.");
       // Do something 
     }
-  }
+  };
 
   return (
     <div className="App">
       <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
-      
-        <div className="auth-section">
-          <ConnectButton />
-        </div>
-
-        <ConnectDialog />
-
-        <Form 
-          iiAddress={iiAddress}
-          setIIAddress={setIIAddress}
-          claimNFT={claimNFT} 
-          isLoggedIn={isLoggedIn}
-        />
-
+          <div className="auth-section">
+            <ConnectButton />
+          </div>
+          <ConnectDialog />
+          <Form 
+            iiAddress={iiAddress}
+            setIIAddress={setIIAddress}
+            claimNFT={claimNFT} 
+            isLoggedIn={isLoggedIn}
+            accountNbr={accountNbr}
+            principalID={principalID}
+          />
     </div>
   )
 }
