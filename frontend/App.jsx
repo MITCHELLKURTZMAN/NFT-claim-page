@@ -24,6 +24,7 @@ function App() {
   const [accountNbr_5, setaccountNbr_5] = useState("");
   const [principalID, setPrincipalID] = useState("");
   const [iiAddress, setIIAddress] = useState("");
+  const [selectedAccount, setSelectedAccount] = useState("");
 
   const { isConnected, principal, activeProvider } = useConnect({
     onConnect: () => {
@@ -70,10 +71,19 @@ function App() {
     return accountNumber;
   };
 
+  function handleAccountChange(event) {
+    setSelectedAccount(event.target.value);
+  };
+
   const claimTokens = (event) => {
     event.preventDefault();
     const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
     const confirmCheckbox = document.getElementById("confirm");
+
+    if (!selectedAccount || selectedAccount === "Select the account you want to use") {
+      alert("Please select an account.");
+      return;
+    }
   
     if (!confirmCheckbox.checked) {
       alert("Please confirm that the wallet information is correct.");
@@ -111,6 +121,9 @@ function App() {
             accountNbr_4={accountNbr_4}
             accountNbr_5={accountNbr_5}
             principalID={principalID}
+            handleAccountChange={handleAccountChange}
+            selectedAccount={selectedAccount}
+            setSelectedAccount={setSelectedAccount}
           />
     </div>
   )

@@ -16,15 +16,12 @@ const Form = ({
     accountNbr_3,
     accountNbr_4,
     accountNbr_5,
-    principalID
+    principalID,
+    handleAccountChange,
+    selectedAccount,
   }) => {
 
     const [openModal, setOpenModal] = useState(false);
-    const [selectedAccount, setSelectedAccount] = useState("");
-
-    function handleAccountChange(event) {
-      setSelectedAccount(event.target.value);
-    }
   
     return (
         <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 py-10">
@@ -71,7 +68,7 @@ const Form = ({
                                 <p className="block uppercase font-medium text-xs">Currently selected:</p>
                                 {selectedAccount ? 
                                     <p className="block font-medium text-gray-600">{selectedAccount}</p>
-                                     : accountNbr_0 
+                                     : 'Please select an account from the dropdown menu above.'
                                 }
 
                                 <p class="block uppercase font-bold mt-5"> Principal ID</p>
