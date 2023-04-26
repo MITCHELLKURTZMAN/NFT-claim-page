@@ -8,9 +8,10 @@ import step3 from "../assets/step3.png";
 const Form = ({ 
     iiAddress,
     setIIAddress,
-    claimNFT,
+    claimTokens,
     isLoggedIn, 
     accountNbr, 
+    subAccountID,
     principalID
   }) => {
 
@@ -28,7 +29,9 @@ const Form = ({
                             <label class="text-blue-800 text-lg uppercase font-black">What to do</label>
                             <p class="block text-sm font-medium text-gray-900 mb-2"> 
                                 <span class="font-black text-gray-700">1.</span> &nbsp;
-                                Your wallet account number and principal ID are displayed in the blue box below. 
+                                Your wallet account number 
+                                {subAccountID === "" ? ' and ' : ', sub-account ID, and '}
+                                principal ID are displayed in the blue box below. 
                                 Click the checkbox to confirm that they are correct.
                             </p>
                             <p class="block text-sm font-medium text-gray-900"> 
@@ -43,6 +46,14 @@ const Form = ({
                             <div class="my-5 text-sm bg-blue-100 p-6 rounded-lg">
                                 <p class="block uppercase font-bold"> Account Number</p>
                                 <p class="block mb-3 font-medium">{accountNbr}</p>
+
+                                {subAccountID === "" ? '' : 
+                                    <div>
+                                        <p class="block uppercase font-bold"> Sub-Account ID</p>
+                                        <p class="block mb-3 font-medium">{subAccountID}</p>
+                                    </div>
+                                }
+
                                 <p class="block uppercase font-bold"> Principal ID</p>
                                 <p class="block font-medium">{principalID}</p>
 
@@ -68,12 +79,12 @@ const Form = ({
                                 </div>
                             </fieldset>
 
-                            <form class="mb-3" onSubmit={claimNFT}>
+                            <form class="mb-3" onSubmit={claimTokens}>
                                 <div class="mb-3">
                                     <input 
                                         value={iiAddress} 
                                         onChange={(event) => setIIAddress(event.target.value)}
-                                        placeholder="Enter your Internet Identity Address here." 
+                                        placeholder="Enter your Internet Identity Principal ID here." 
                                         class="block w-full rounded-md border border-gray-300 focus:border-purple-700 
                                         focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" 
                                     />

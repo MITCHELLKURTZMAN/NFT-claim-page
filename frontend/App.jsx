@@ -6,7 +6,6 @@ import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@c
 import { createClient } from "@connect2ic/core";
 import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
-import { NFID } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { StoicWallet  } from "@connect2ic/core/providers";
 import { Form } from "./components/Form";
@@ -18,6 +17,7 @@ import { Buffer } from 'buffer';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountNbr, setAccountNbr] = useState("");
+  const [subAccountID, setSubAccountID] = useState("");
   const [principalID, setPrincipalID] = useState("");
   const [iiAddress, setIIAddress] = useState("");
 
@@ -32,8 +32,9 @@ function App() {
 
   useEffect(() => {
     if (principal) {
-      setPrincipalID(principal.replace(/"/g, ''));
       setAccountNbr(firstAccountOfPrincipal(Principal.fromText(principal)).replace(/"/g, ''));
+      setSubAccountID("")
+      setPrincipalID(principal.replace(/"/g, ''));
     }
   }, [principal]);  
   
@@ -70,13 +71,13 @@ function App() {
     return padSubaccountArray(arr);
   };
 
-  const claimNFT = (event) => {
+  const claimTokens = (event) => {
     event.preventDefault();
     const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
     const confirmCheckbox = document.getElementById("confirm");
   
     if (!confirmCheckbox.checked) {
-      alert("Please confirm that the addresses are correct.");
+      alert("Please confirm that the wallet information is correct.");
       return;
     }
   
@@ -102,9 +103,10 @@ function App() {
           <Form 
             iiAddress={iiAddress}
             setIIAddress={setIIAddress}
-            claimNFT={claimNFT} 
+            claimTokens={claimTokens} 
             isLoggedIn={isLoggedIn}
             accountNbr={accountNbr}
+            subAccountID={subAccountID}
             principalID={principalID}
           />
     </div>
@@ -118,7 +120,6 @@ const client = createClient({
   providers: [
     new AstroX(),
     new InfinityWallet(),
-    new NFID(),
     new PlugWallet(),
     new StoicWallet()
   ],
