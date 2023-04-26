@@ -21,7 +21,6 @@ function App() {
   const [accountNbr_2, setaccountNbr_2] = useState("");
   const [accountNbr_3, setaccountNbr_3] = useState("");
   const [accountNbr_4, setaccountNbr_4] = useState("");
-  const [accountNbr_5, setaccountNbr_5] = useState("");
   const [principalID, setPrincipalID] = useState("");
   const [iiAddress, setIIAddress] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
@@ -42,7 +41,6 @@ function App() {
       setaccountNbr_2(accountOfPrincipal(Principal.fromText(principal), 2).replace(/"/g, ''));
       setaccountNbr_3(accountOfPrincipal(Principal.fromText(principal), 3).replace(/"/g, ''));
       setaccountNbr_4(accountOfPrincipal(Principal.fromText(principal), 4).replace(/"/g, ''));
-      setaccountNbr_5(accountOfPrincipal(Principal.fromText(principal), 5).replace(/"/g, ''));
       setPrincipalID(principal.replace(/"/g, ''));
     }
   }, [principal]);  
@@ -119,7 +117,6 @@ function App() {
             accountNbr_2={accountNbr_2}
             accountNbr_3={accountNbr_3}
             accountNbr_4={accountNbr_4}
-            accountNbr_5={accountNbr_5}
             principalID={principalID}
             handleAccountChange={handleAccountChange}
             selectedAccount={selectedAccount}

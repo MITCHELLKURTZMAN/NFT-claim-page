@@ -15,7 +15,6 @@ const Form = ({
     accountNbr_2,
     accountNbr_3,
     accountNbr_4,
-    accountNbr_5,
     principalID,
     handleAccountChange,
     selectedAccount,
@@ -37,8 +36,13 @@ const Form = ({
                             <ol class="list-decimal ml-5 font-black text-sm text-gray-700">
                                 <li>
                                     <p class="block text-sm font-medium text-gray-900 mb-2"> 
-                                        Your wallet account number, sub-account ID, and principal ID are displayed in the blue box below. 
-                                        Click the checkbox to confirm that they are correct.
+                                        Your wallet information (account numbers and principal ID) are displayed in the blue box below. 
+                                        Select the account number that you want to use.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="block text-sm font-medium text-gray-900 mb-2"> 
+                                        Click the checkbox to confirm that your wallet information is correct.
                                     </p>
                                 </li>
                                 <li>
@@ -56,19 +60,18 @@ const Form = ({
                                 <p className="block uppercase font-bold">Account Number</p>
 
                                 <select className="mb-3 p-1.5 -mx-3 rounded-md bg-gray-50" onChange={handleAccountChange}>
-                                    <option selected disabled>Select the account you want to use</option>
+                                    <option selected disabled>Select the account you want to use.</option>
                                     <option>{accountNbr_0}</option>
                                     <option>{accountNbr_1}</option>
                                     <option>{accountNbr_2}</option>
                                     <option>{accountNbr_3}</option>
                                     <option>{accountNbr_4}</option>
-                                    <option>{accountNbr_5}</option>
                                 </select>
 
                                 <p className="block uppercase font-medium text-xs">Currently selected:</p>
                                 {selectedAccount ? 
                                     <p className="block font-medium text-gray-600">{selectedAccount}</p>
-                                     : 'Please select an account from the dropdown menu above.'
+                                     : 'Please select an account from the dropdown above.'
                                 }
 
                                 <p class="block uppercase font-bold mt-5"> Principal ID</p>
