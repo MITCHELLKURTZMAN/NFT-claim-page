@@ -16,8 +16,12 @@ import { Buffer } from 'buffer';
  
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [accountNbr, setAccountNbr] = useState("");
-  const [subAccountID, setSubAccountID] = useState("");
+  const [accountNbr_0, setaccountNbr_0] = useState("");
+  const [accountNbr_1, setaccountNbr_1] = useState("");
+  const [accountNbr_2, setaccountNbr_2] = useState("");
+  const [accountNbr_3, setaccountNbr_3] = useState("");
+  const [accountNbr_4, setaccountNbr_4] = useState("");
+  const [accountNbr_5, setaccountNbr_5] = useState("");
   const [principalID, setPrincipalID] = useState("");
   const [iiAddress, setIIAddress] = useState("");
 
@@ -32,8 +36,12 @@ function App() {
 
   useEffect(() => {
     if (principal) {
-      setAccountNbr(firstAccountOfPrincipal(Principal.fromText(principal)).replace(/"/g, ''));
-      setSubAccountID("")
+      setaccountNbr_0(accountOfPrincipal(Principal.fromText(principal), 0).replace(/"/g, ''));
+      setaccountNbr_1(accountOfPrincipal(Principal.fromText(principal), 1).replace(/"/g, ''));
+      setaccountNbr_2(accountOfPrincipal(Principal.fromText(principal), 2).replace(/"/g, ''));
+      setaccountNbr_3(accountOfPrincipal(Principal.fromText(principal), 3).replace(/"/g, ''));
+      setaccountNbr_4(accountOfPrincipal(Principal.fromText(principal), 4).replace(/"/g, ''));
+      setaccountNbr_5(accountOfPrincipal(Principal.fromText(principal), 5).replace(/"/g, ''));
       setPrincipalID(principal.replace(/"/g, ''));
     }
   }, [principal]);  
@@ -54,21 +62,12 @@ function App() {
     return addCrc32(hashed).toString("hex");
   };
   
-  const firstAccountOfPrincipal = (principal) => {
+  const accountOfPrincipal = (principal, subaccount) => {
     let accountNumber = accountIdentifierFromSubaccount( 
       Buffer.from(principal.toUint8Array()),
-      Buffer.from(Array(32).fill(0))
+      Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, subaccount])
     );
     return accountNumber;
-  };
-  
-  const padSubaccountArray = (arg) =>
-    arg.concat(Array(32 - arg.length).fill(0));
-  
-  const makeCanisterIdSubaccount = (canisterId) => {
-    let arr = Array.from(Principal.fromText(canisterId).toUint8Array());
-    arr = [arr.length].concat(arr);
-    return padSubaccountArray(arr);
   };
 
   const claimTokens = (event) => {
@@ -105,8 +104,12 @@ function App() {
             setIIAddress={setIIAddress}
             claimTokens={claimTokens} 
             isLoggedIn={isLoggedIn}
-            accountNbr={accountNbr}
-            subAccountID={subAccountID}
+            accountNbr_0={accountNbr_0}
+            accountNbr_1={accountNbr_1}
+            accountNbr_2={accountNbr_2}
+            accountNbr_3={accountNbr_3}
+            accountNbr_4={accountNbr_4}
+            accountNbr_5={accountNbr_5}
             principalID={principalID}
           />
     </div>

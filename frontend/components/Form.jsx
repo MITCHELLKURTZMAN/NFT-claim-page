@@ -10,12 +10,21 @@ const Form = ({
     setIIAddress,
     claimTokens,
     isLoggedIn, 
-    accountNbr, 
-    subAccountID,
+    accountNbr_0, 
+    accountNbr_1,
+    accountNbr_2,
+    accountNbr_3,
+    accountNbr_4,
+    accountNbr_5,
     principalID
   }) => {
 
     const [openModal, setOpenModal] = useState(false);
+    const [selectedAccount, setSelectedAccount] = useState("");
+
+    function handleAccountChange(event) {
+      setSelectedAccount(event.target.value);
+    }
   
     return (
         <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 py-10">
@@ -31,9 +40,7 @@ const Form = ({
                             <ol class="list-decimal ml-5 font-black text-sm text-gray-700">
                                 <li>
                                     <p class="block text-sm font-medium text-gray-900 mb-2"> 
-                                        Your wallet account number 
-                                        {subAccountID === "" ? ' and ' : ', sub-account ID, and '}
-                                        principal ID are displayed in the blue box below. 
+                                        Your wallet account number, sub-account ID, and principal ID are displayed in the blue box below. 
                                         Click the checkbox to confirm that they are correct.
                                     </p>
                                 </li>
@@ -48,21 +55,32 @@ const Form = ({
                                 </li>
                             </ol>
 
-                            <div class="mt-5 text-sm bg-blue-100 p-6 rounded-lg">
-                                <p class="block uppercase font-bold"> Account Number</p>
-                                <p class="block mb-3 font-medium text-gray-600">{accountNbr}</p>
-                                {subAccountID === "" ? '' : 
-                                    <div>
-                                        <p class="block uppercase font-bold"> Sub-Account ID</p>
-                                        <p class="block mb-3 font-medium text-gray-600">{subAccountID}</p>
-                                    </div>
+                            <div class="mt-7 text-sm bg-blue-100 p-6 rounded-lg">
+                                <p className="block uppercase font-bold">Account Number</p>
+
+                                <select className="mb-3 p-1.5 -mx-3 rounded-md bg-gray-50" onChange={handleAccountChange}>
+                                    <option selected disabled>Select the account you want to use</option>
+                                    <option>{accountNbr_0}</option>
+                                    <option>{accountNbr_1}</option>
+                                    <option>{accountNbr_2}</option>
+                                    <option>{accountNbr_3}</option>
+                                    <option>{accountNbr_4}</option>
+                                    <option>{accountNbr_5}</option>
+                                </select>
+
+                                <p className="block uppercase font-medium text-xs">Currently selected:</p>
+                                {selectedAccount ? 
+                                    <p className="block font-medium text-gray-600">{selectedAccount}</p>
+                                     : accountNbr_0 
                                 }
-                                <p class="block uppercase font-bold"> Principal ID</p>
+
+                                <p class="block uppercase font-bold mt-5"> Principal ID</p>
                                 <p class="block font-medium text-gray-600">{principalID}</p>
                             </div>
+                            
 
-                            <span class="block mt-1 mb-5 text-xs font-base"> 
-                                If the above is incorrect, please contact us on Twitter:&nbsp;
+                            <span class="block mt-1 mb-7 text-xs font-base"> 
+                                If the above is incorrect, please contact us on our Twitter page:&nbsp;
                                 <a href="https://twitter.com/kinic_app" target="blank" 
                                     class="font-semibold text-blue-600 hover:underline cursor-pointer">
                                     https://twitter.com/kinic_app
