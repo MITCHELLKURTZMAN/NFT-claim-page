@@ -26,3 +26,8 @@ Claim your Kinic Tokens using your Internet Identity Principal ID
 4. Start the development server using `sudo dfx start`
 5. Start the development server using `sudo dfx deploy`
 6. View locally using `vite serve`
+
+### Deploy canister
+1. `dfx start --clean --background && dfx canister create assets && dfx deploy main`
+1. `npm run generate-declarations`
+1. `node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) ./arg.json`
