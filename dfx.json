@@ -2,11 +2,12 @@
   "canisters": {
     "main": {
       "main": "canisters/main.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "args": "arg.txt"
     },
     "assets": {
       "dependencies": [
-        "counter"
+        "main"
       ],
       "frontend": {
         "entrypoint": "dist/index.html"
