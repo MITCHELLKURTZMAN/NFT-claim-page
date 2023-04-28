@@ -17,9 +17,9 @@ shared ({ caller = installer }) actor class RegistryII(){
 
 
   public shared({caller = caller}) func setHolders(inputJsonText: Text) {
-    let buffer = Buffer.fromArray<Registry>(registryII);
     if (caller != installer) Debug.trap "Not authorised";
     if (Principal.isAnonymous(caller)) Debug.trap "Not authorised";
+    let buffer = Buffer.fromArray<Registry>(registryII);
     let jsonArrray = switch (JSON.parse(inputJsonText)) {
       case (?#Array v) v;
       case _ Debug.trap "Must be array"
@@ -58,6 +58,8 @@ shared ({ caller = installer }) actor class RegistryII(){
   };
 
   public shared query({caller = caller}) func show(): async Text {
+    if (caller != installer) Debug.trap "Not authorised";
+    if (Principal.isAnonymous(caller)) Debug.trap "Not authorised";
     JSON.show(#Object(Array.map<Registry, (Text, JSON.JSON)>(registryII, func(a, p) {
       let principalText_null = switch (p) {
         case (?p) ?Principal.toText(p);
