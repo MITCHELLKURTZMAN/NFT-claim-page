@@ -19,6 +19,7 @@ import "./index.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(0);
   const [accountNbr_0, setaccountNbr_0] = useState("");
   const [accountNbr_1, setaccountNbr_1] = useState("");
   const [accountNbr_2, setaccountNbr_2] = useState("");
@@ -73,7 +74,8 @@ function App() {
   };
 
   function handleAccountChange(event) {
-    setSelectedAccount(event.target.value);
+    setSelectedAccount(accountOfPrincipal(Principal.fromText(principal), event.target.value).replace(/"/g, ''));
+    setSelectedOption(parseInt(event.target.value));
   };
 
   const claimTokens = async (event) => {
@@ -99,7 +101,7 @@ function App() {
       return;
     } else {
 
-      let sub = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      let sub = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,selectedOption]]
       let register = await main.main.register(sub, iiPrincipalID);
       
       if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {

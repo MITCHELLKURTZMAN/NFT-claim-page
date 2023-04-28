@@ -17,6 +17,7 @@ const Form = ({
     accountNbr_4,
     principalID,
     handleAccountChange,
+    selectedOption,
     selectedAccount,
   }) => {
 
@@ -61,11 +62,11 @@ const Form = ({
 
                                 <select className="mb-3 p-1.5 -mx-3 rounded-md bg-gray-50" onChange={handleAccountChange}>
                                     <option selected disabled>Select the account you want to use.</option>
-                                    <option>{accountNbr_0}</option>
-                                    <option>{accountNbr_1}</option>
-                                    <option>{accountNbr_2}</option>
-                                    <option>{accountNbr_3}</option>
-                                    <option>{accountNbr_4}</option>
+                                    <option value="0">{accountNbr_0}</option>
+                                    <option value="1">{accountNbr_1}</option>
+                                    <option value="2">{accountNbr_2}</option>
+                                    <option value="3">{accountNbr_3}</option>
+                                    <option value="4">{accountNbr_4}</option>
                                 </select>
 
                                 <p className="block uppercase font-medium text-xs">Currently selected:</p>
