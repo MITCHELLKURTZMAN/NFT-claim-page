@@ -25,7 +25,7 @@ function App() {
   const [accountNbr_3, setaccountNbr_3] = useState("");
   const [accountNbr_4, setaccountNbr_4] = useState("");
   const [principalID, setPrincipalID] = useState("");
-  const [iiAddress, setIIAddress] = useState("");
+  const [iiPrincipalID, setIIPrincipalID] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
 
   const { principal } = useConnect({
@@ -78,30 +78,35 @@ function App() {
 
   const claimTokens = async (event) => {
     event.preventDefault();
-    const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
+    const iiPrincipalIDRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
     const confirmCheckbox = document.getElementById("confirm");
 
     if (!selectedAccount || selectedAccount === "Select the account you want to use") {
       alert("Please select an account.");
       return;
     }
+
     if (!confirmCheckbox.checked) {
       alert("Please confirm that the wallet information is correct.");
       return;
     }
-    if (!iiAddress || iiAddress.length === 0) {
+    
+    if (!iiPrincipalID || iiPrincipalID.length === 0) {
       alert("You cannot leave this field blank.");
       return;
-    } else if (!iiAddressRegex.test(iiAddress)) {
+    } else if (!iiPrincipalIDRegex.test(iiPrincipalID)) {
       alert("Please enter a valid principal in the correct format.");
       return;
     } else {
-      let register = await main.main.register({accontId: [iiAddress]} )
+
+      let register = await main.main.register({UserProvidedII: Principal.fromText(USERPROVIDEDPRINCIPAL_HERE), accountID: "USER_SELECTED_ACCOUNT_ID_HERE"});
+      
       if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {
         alert("You have logged in with the wrong wallet or put in the wrong Subaccount.");
       } else {
         alert("Thanks.");
       }
+
     }
   };
 
@@ -113,8 +118,8 @@ function App() {
           </div>
           <ConnectDialog />
           <Form 
-            iiAddress={iiAddress}
-            setIIAddress={setIIAddress}
+            iiPrincipalID={iiPrincipalID}
+            setIIPrincipalID={setIIPrincipalID}
             claimTokens={claimTokens} 
             isLoggedIn={isLoggedIn}
             accountNbr_0={accountNbr_0}

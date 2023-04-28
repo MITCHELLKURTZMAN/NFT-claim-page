@@ -6,8 +6,8 @@ import step2 from "../assets/step2.png";
 import step3 from "../assets/step3.png";
 
 const Form = ({ 
-    iiAddress,
-    setIIAddress,
+    iiPrincipalID,
+    setIIPrincipalID,
     claimTokens,
     isLoggedIn, 
     accountNbr_0, 
@@ -103,8 +103,8 @@ const Form = ({
                             <form class="mb-3" onSubmit={claimTokens}>
                                 <div class="mb-3">
                                     <input 
-                                        value={iiAddress} 
-                                        onChange={(event) => setIIAddress(event.target.value)}
+                                        value={iiPrincipalID} 
+                                        onChange={(event) => setIIPrincipalID(event.target.value)}
                                         placeholder="Enter your Internet Identity Principal ID here." 
                                         class="block w-full rounded-md border border-gray-300 focus:border-purple-700 
                                         focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" 
