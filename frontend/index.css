@@ -68,8 +68,8 @@ body {
     top: 50%;
     left: 50%;
     width: 120%;
-    min-width: 18rem;
-    max-width: 33rem;
+    min-width: 28rem;
+    max-width: 43rem;
     margin: 0 auto;
     aspect-ratio: 1;
     transform: translate3d(-50%, -50%, 0);

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "@connect2ic/core/style.css";
-import "./index.css";
 
 import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react";
 import { createClient } from "@connect2ic/core";
@@ -8,12 +6,17 @@ import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { StoicWallet  } from "@connect2ic/core/providers";
-import { Form } from "./components/Form";
 import { Principal } from "@dfinity/principal";
 import { getCrc32 } from "@dfinity/principal/lib/cjs/utils/getCrc.js";
 import { sha224 } from "@dfinity/principal/lib/cjs/utils/sha224.js";
 import { Buffer } from 'buffer';
- 
+
+import * as main from "canisters/main";
+import { Form } from "./components/Form";
+
+import "@connect2ic/core/style.css";
+import "./index.css";
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountNbr_0, setaccountNbr_0] = useState("");
@@ -25,7 +28,7 @@ function App() {
   const [iiAddress, setIIAddress] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
 
-  const { isConnected, principal, activeProvider } = useConnect({
+  const { principal } = useConnect({
     onConnect: () => {
         setIsLoggedIn(true); 
     },
@@ -73,7 +76,7 @@ function App() {
     setSelectedAccount(event.target.value);
   };
 
-  const claimTokens = (event) => {
+  const claimTokens = async (event) => {
     event.preventDefault();
     const iiAddressRegex = /^(?:[a-z0-9]{5}-){10}[a-z0-9]{3}$/;
     const confirmCheckbox = document.getElementById("confirm");
@@ -82,12 +85,10 @@ function App() {
       alert("Please select an account.");
       return;
     }
-  
     if (!confirmCheckbox.checked) {
       alert("Please confirm that the wallet information is correct.");
       return;
     }
-  
     if (!iiAddress || iiAddress.length === 0) {
       alert("You cannot leave this field blank.");
       return;
@@ -95,8 +96,12 @@ function App() {
       alert("Please enter a valid principal in the correct format.");
       return;
     } else {
-      alert("Thanks.");
-      // Do something 
+      let register = await main.main.register({accontId: [iiAddress]} )
+      if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {
+        alert("You have logged in with the wrong wallet or put in the wrong Subaccount.");
+      } else {
+        alert("Thanks.");
+      }
     }
   };
 
@@ -128,7 +133,7 @@ function App() {
 
 const client = createClient({
   canisters: {
-
+    main
   },
   providers: [
     new AstroX(),
