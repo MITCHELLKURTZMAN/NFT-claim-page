@@ -99,7 +99,8 @@ function App() {
       return;
     } else {
 
-      let register = await main.main.register({UserProvidedII: Principal.fromText(USERPROVIDEDPRINCIPAL_HERE), accountID: "USER_SELECTED_ACCOUNT_ID_HERE"});
+      let sub = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      let register = await main.main.register(sub, iiPrincipalID);
       
       if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {
         alert("You have logged in with the wrong wallet or put in the wrong Subaccount.");
