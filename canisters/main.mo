@@ -6,6 +6,7 @@ import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Principal "mo:base/Principal";
 import Buffer "mo:base/Buffer";
+import AccountIdentifier "mo:AccountId/AccountIdentifier";
 
 
 // node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) /Users/clankpan/Develop/ICME/SNS/NFT-claim-page/arg.json
@@ -44,8 +45,11 @@ shared ({ caller = installer }) actor class RegistryII(){
   };
 
   public shared({caller = caller}) func register(subaccount: ?AccountId.SubAccount, ii: Text) {
+    Debug.print(debug_show(caller));
+    if (Principal.isAnonymous(caller)) Debug.trap "You are anonymos";
     let buffer = Buffer.fromArray<Registry>(registryII);
     let accontId = AccountId.fromPrincipal(caller, subaccount);
+    Debug.print(AccountId.toText(accontId));
     var isOwner = false;
     registryII := Buffer.toArray(Buffer.map<Registry, Registry>(buffer, func(a, p) {
       if (AccountId.equal(a, accontId)) {

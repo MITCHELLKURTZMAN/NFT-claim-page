@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react";
+import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect, useCanister } from "@connect2ic/react";
 import { createClient } from "@connect2ic/core";
 import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
@@ -12,6 +12,9 @@ import { sha224 } from "@dfinity/principal/lib/cjs/utils/sha224.js";
 import { Buffer } from 'buffer';
 
 import * as main from "canisters/main";
+// import { HttpAgent } from "@dfinity/agent";
+// import { createActor } from "../../src/declarations/main/index.js"; // Need to commentout "export const main = createActor(canisterId);" in this file.
+
 import { Form } from "./components/Form";
 
 import "@connect2ic/core/style.css";
@@ -28,8 +31,12 @@ function App() {
   const [principalID, setPrincipalID] = useState("");
   const [iiPrincipalID, setIIPrincipalID] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
+  // const authClient = AuthClient.create();
 
-  const { principal } = useConnect({
+  const [mainCanister, { loading, error }] = useCanister("main",  { mode: "connected" });
+  // console.log(loading, error)
+
+  const { principal, isConnecting, connect, activeProvider } = useConnect({
     onConnect: () => {
         setIsLoggedIn(true); 
     },
@@ -68,7 +75,7 @@ function App() {
   const accountOfPrincipal = (principal, subaccount) => {
     let accountNumber = accountIdentifierFromSubaccount( 
       Buffer.from(principal.toUint8Array()),
-      Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, subaccount])
+      Buffer.from([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,subaccount])
     );
     return accountNumber;
   };
@@ -100,9 +107,9 @@ function App() {
       alert("Please enter a valid principal in the correct format.");
       return;
     } else {
+      let sub = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,selectedOption]]
+      let register = await mainCanister.register(sub, iiPrincipalID);
 
-      let sub = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,selectedOption]]
-      let register = await main.main.register(sub, iiPrincipalID);
       
       if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {
         alert("You have logged in with the wrong wallet or put in the wrong Subaccount.");
@@ -115,9 +122,9 @@ function App() {
 
   return (
     <div className="App">
-      <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
+      <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
           <div className="auth-section">
-            <ConnectButton />
+            <ConnectButton/>
           </div>
           <ConnectDialog />
           <Form 
@@ -154,12 +161,17 @@ const client = createClient({
      * Disables dev mode in production
      * Should be enabled when using local canisters
      */
+    // Determines whether root key is fetched
+    // Should be enabled while developing locally & disabled in production
+    dev: true,
+    // The host
+    host: "http://localhost:8080",
     dev: import.meta.env.DEV,
   },
 })
 
-export default () => (
+export default ({authClient}) => (
   <Connect2ICProvider client={client}>
-    <App />
+    <App/>
   </Connect2ICProvider>
 )
