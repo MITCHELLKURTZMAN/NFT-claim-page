@@ -6,6 +6,7 @@ import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
 import { StoicWallet  } from "@connect2ic/core/providers";
+import { NFID } from "@connect2ic/core/providers/nfid";
 import { Principal } from "@dfinity/principal";
 import { getCrc32 } from "@dfinity/principal/lib/cjs/utils/getCrc.js";
 import { sha224 } from "@dfinity/principal/lib/cjs/utils/sha224.js";
@@ -146,15 +147,21 @@ function App() {
   )
 }
 
+let host = 'https://ic0.app'
+if (location.port === '3000' || location.port === '8000') {
+  host = 'http://127.0.0.1:8080'
+}
+
 const client = createClient({
   canisters: {
     main
   },
   providers: [
+    new StoicWallet(),
+    new PlugWallet(),
+    new NFID(),
     new AstroX(),
     new InfinityWallet(),
-    new PlugWallet(),
-    new StoicWallet()
   ],
   globalProviderConfig: {
     /*
@@ -163,9 +170,8 @@ const client = createClient({
      */
     // Determines whether root key is fetched
     // Should be enabled while developing locally & disabled in production
-    dev: true,
     // The host
-    host: "http://localhost:8080",
+    host,
     dev: import.meta.env.DEV,
   },
 })
