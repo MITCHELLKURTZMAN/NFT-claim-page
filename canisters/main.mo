@@ -56,7 +56,7 @@ shared ({ caller = installer }) actor class RegistryII(){
         isOwner := true;
         return (a, ?Principal.fromText(ii));
       }
-      else return (a, null);
+      else return (a, p);
     }));
     if (not isOwner) Debug.trap "You have logged in with the wrong wallet or put in the wrong Subaccount.";
   };
