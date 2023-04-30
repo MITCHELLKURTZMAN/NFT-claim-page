@@ -37,7 +37,7 @@ const Form = ({
                             <ol  className="list-decimal ml-5 font-black text-sm text-gray-700">
                                 <li>
                                     <p  className="block text-sm font-medium text-gray-900 mb-2"> 
-                                        Your wallet information (account numbers and principal ID) are displayed in the blue box below. 
+                                        Your wallet information (account numbers and principal ID) is displayed in the blue box below. 
                                         Select the account number that you want to use.
                                     </p>
                                 </li>
@@ -58,8 +58,8 @@ const Form = ({
                             </ol>
 
                             <div  className="mt-7 text-sm bg-blue-100 p-6 rounded-lg">
-                                <p className="block uppercase font-bold">Account Number</p>
 
+                                <p className="block uppercase font-medium text-xs mb-1">Please select an account number:</p>
                                 <select className="mb-3 p-1.5 -mx-3 rounded-md bg-gray-50" onChange={handleAccountChange}>
                                     <option selected disabled>Select the account you want to use.</option>
                                     <option value="0">{accountNbr_0}</option>
@@ -69,14 +69,15 @@ const Form = ({
                                     <option value="4">{accountNbr_4}</option>
                                 </select>
 
-                                <p className="block uppercase font-medium text-xs">Currently selected:</p>
-                                {selectedAccount ? 
-                                    <p className="block font-medium text-gray-600">{selectedAccount}</p>
-                                     : 'Please select an account from the dropdown above.'
-                                }
+                                    <p className="block uppercase font-bold">Account Number</p>
+                                    {selectedAccount ? 
+                                        <p className="block font-medium text-gray-600">{selectedAccount}</p>
+                                        : 'Please select an account from the dropdown above.'
+                                    }
 
-                                <p  className="block uppercase font-bold mt-5"> Principal ID</p>
-                                <p  className="block font-medium text-gray-600">{principalID}</p>
+                                    <p  className="block uppercase font-bold mt-5"> Principal ID</p>
+                                    <p  className="block font-medium text-gray-600">{principalID}</p>
+
                             </div>
                             
 
