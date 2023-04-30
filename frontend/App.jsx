@@ -38,7 +38,7 @@ function App() {
 
   const { principal, isConnecting, connect, activeProvider } = useConnect({
     onConnect: () => {
-        setIsLoggedIn(true); 
+        setIsLoggedIn(true);
     },
     onDisconnect: () => {
         setIsLoggedIn(false);
@@ -54,14 +54,14 @@ function App() {
       setaccountNbr_4(accountOfPrincipal(Principal.fromText(principal), 4).replace(/"/g, ''));
       setPrincipalID(principal.replace(/"/g, ''));
     }
-  }, [principal]);  
-  
+  }, [principal]);
+
   const addCrc32 = (buf) => {
     const crc32Buf = Buffer.alloc(4);
     crc32Buf.writeUInt32BE(getCrc32(buf), 0);
     return Buffer.concat([crc32Buf, buf]);
   };
-  
+
   const accountIdentifierFromSubaccount = (principal, subaccount) => {
     const preimage = Buffer.concat([
       Buffer.from("\x0Aaccount-id"),
@@ -71,9 +71,9 @@ function App() {
     const hashed = Buffer.from(sha224(preimage));
     return addCrc32(hashed).toString("hex");
   };
-  
+
   const accountOfPrincipal = (principal, subaccount) => {
-    let accountNumber = accountIdentifierFromSubaccount( 
+    let accountNumber = accountIdentifierFromSubaccount(
       Buffer.from(principal.toUint8Array()),
       Buffer.from([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,subaccount])
     );
@@ -99,7 +99,7 @@ function App() {
       alert("Please confirm that the wallet information is correct.");
       return;
     }
-    
+
     if (!iiPrincipalID || iiPrincipalID.length === 0) {
       alert("You cannot leave this field blank.");
       return;
@@ -108,13 +108,13 @@ function App() {
       return;
     } else {
       let sub = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,selectedOption]]
-      let register = await mainCanister.register(sub, iiPrincipalID);
-
-      
-      if (register.err === "You have logged in with the wrong wallet or put in the wrong Subaccount.") {
+      try {
+        let register = await mainCanister.register(sub, iiPrincipalID);
+        alert("Your NFT has been claimed. The II principal ID that you gave will be added to the SNS launch config.");
+        console.log(register)
+      } catch (e) {
         alert("You have logged in with the wrong wallet or put in the wrong Subaccount.");
-      } else {
-        alert("Thanks.");
+        console.log(e)
       }
 
     }
@@ -127,10 +127,10 @@ function App() {
             <ConnectButton/>
           </div>
           <ConnectDialog />
-          <Form 
+          <Form
             iiPrincipalID={iiPrincipalID}
             setIIPrincipalID={setIIPrincipalID}
-            claimTokens={claimTokens} 
+            claimTokens={claimTokens}
             isLoggedIn={isLoggedIn}
             accountNbr_0={accountNbr_0}
             accountNbr_1={accountNbr_1}
