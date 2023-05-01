@@ -6,3 +6,4 @@ dist-ssr
 .dfx
 .vessel
 src/declarations/
+test

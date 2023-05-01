@@ -6,77 +6,75 @@ import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Principal "mo:base/Principal";
 import Buffer "mo:base/Buffer";
-import AccountIdentifier "mo:AccountId/AccountIdentifier";
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
 
 
 // node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) /Users/clankpan/Develop/ICME/SNS/NFT-claim-page/arg.json
-shared ({ caller = installer }) actor class RegistryII(){
-
-  type Registry = (AccountId.AccountIdentifier, ?Principal);
-  // var registryII = Buffer.Buffer<(AccountId.AccountIdentifier, ?Principal)>(150);
-  stable var registryII: [Registry] = [];
+shared ({ caller = installer }) actor class RegistryII(arg: Text){
 
 
-  public shared({caller = caller}) func setHolders(inputJsonText: Text) {
-    if (caller != installer) Debug.trap "Not authorised";
-    if (Principal.isAnonymous(caller)) Debug.trap "Not authorised";
-    let buffer = Buffer.fromArray<Registry>(registryII);
-    let jsonArrray = switch (JSON.parse(inputJsonText)) {
-      case (?#Array v) v;
-      case _ Debug.trap "Must be array"
-    };
+  // type Registry = (AccountId.AccountIdentifier, ?Principal);
+  // // var registryII = Buffer.Buffer<(AccountId.AccountIdentifier, ?Principal)>(150);
+  // stable var registryII: [var Registry] = [];
 
-    for (e in jsonArrray.vals()) {
-      let s = switch (e) {
-        case (#String s) s;
-        case _ Debug.trap "second level must be string";
+  type AccountId = AccountId.AccountIdentifier;
+  type Value = {#P: Principal; #N};
+  type Key = AccountId;
+  stable var entries: [(Key, Value)] = [];
+
+  // Parse JSON
+  switch (JSON.parse(arg)) {
+    case (?#Array array) {
+      // if deploy arg is not null, reset registry
+    if (array.size() != 150) Debug.trap "NFT holders must be under 150";
+    entries := Array.map<JSON.JSON, (Key, Value)>(array, func(e) {
+      let aId = switch (e) {
+        case (#String s) switch (AccountId.fromText(s)) {
+          case (#ok  v) v;
+          case (#err _) Debug.trap "Cannot convert AccountIdentifier";
+        };
+        case _ Debug.trap "Second level must be string";
       };
-      let aId = switch (AccountId.fromText(s)) {
-        case (#ok  v) v;
-        case (#err _) Debug.trap "Cannot convert AccountIdentifier";
-      };
-      buffer.add((aId, null));
+
+      (aId, #N)
+    });
+    Debug.print "Reset current registry";
     };
+    case (?#Null) Debug.print "Not reset current registry"; // Not reset current registry
+    case _ Debug.trap "Must be array"
+  };
+  let registry = HashMap.fromIter<Key, Value>(entries.vals(), 150, AccountId.equal, AccountId.hash);
 
-    if (buffer.size() > 150) Debug.trap "NFT holders must be under 150";
-
-    Debug.print(debug_show(Buffer.toArray(buffer)));
-    registryII := Buffer.toArray(buffer);
+  system func postupgrade() {
+    entries := Iter.toArray(registry.entries());
   };
 
   public shared({caller = caller}) func register(subaccount: ?AccountId.SubAccount, ii: Text) {
-    Debug.print(debug_show(caller));
     if (Principal.isAnonymous(caller)) Debug.trap "You are anonymos";
-    let buffer = Buffer.fromArray<Registry>(registryII);
-    let accontId = AccountId.fromPrincipal(caller, subaccount);
-    Debug.print(AccountId.toText(accontId));
-    var isOwner = false;
-    registryII := Buffer.toArray(Buffer.map<Registry, Registry>(buffer, func(a, p) {
-      if (AccountId.equal(a, accontId)) {
-        isOwner := true;
-        return (a, ?Principal.fromText(ii));
-      }
-      else return (a, null);
-    }));
-    if (not isOwner) Debug.trap "You have logged in with the wrong wallet or put in the wrong Subaccount.";
+    let aId = AccountId.fromPrincipal(caller, subaccount);
+    switch (registry.get(aId)) {
+      case (?_) registry.put(aId, #P(Principal.fromText(ii)));
+      case null Debug.trap "You have logged in with the wrong wallet or put in the wrong Subaccount."
+    };
+    Debug.print("Success!: " # AccountId.toText(aId));
   };
 
   public shared query({caller = caller}) func show(): async Text {
     if (caller != installer) Debug.trap "Not authorised";
     if (Principal.isAnonymous(caller)) Debug.trap "Not authorised";
-    JSON.show(#Object(Array.map<Registry, (Text, JSON.JSON)>(registryII, func(a, p) {
-      let principalText_null = switch (p) {
-        case (?p) ?Principal.toText(p);
-        case (_) null;
-      };
-      let accontIdText = AccountId.toText(a);
 
-      let value = switch (principalText_null) {
-        case (?v) #String v;
-        case null #Null;
-      };
-
-      (accontIdText, value)
-    })))
+    JSON.show(#Object(
+      Array.map<(Key, Value), (Text, JSON.JSON)>(
+        Iter.toArray(registry.entries()), // from
+        func((aId, value)) {
+          let ii = switch (value) {
+            case (#P(p)) #String(Principal.toText(p));
+            case (#N) #Null;
+          };
+          (AccountId.toText(aId), ii); // to
+    })));
   };
+
+  // dfx deploy main --argument $(printf '%s' $(cat test/arg.json)) --upgrade-unchanged
 };

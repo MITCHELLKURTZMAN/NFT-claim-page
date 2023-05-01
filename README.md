@@ -15,17 +15,19 @@ Claim your Kinic Tokens using your Internet Identity Principal ID
 
 ## Getting Started
 
-### Installation 
+### Installation
 
 1. Clone the repository to your local machine using `git clone https://github.com/ICME-Lab/NFT-claim-page.git`
-2. Navigate to the project directory using `cd repo`
-3. Install the necessary dependencies using `npm install`
+1. Navigate to the project directory using `cd repo`
+1. Install the necessary dependencies using `npm install`
 
 ### Deployment
 
-4. Start the development server using `sudo dfx start`
-5. Create and deploy the main canister using `sudo dfx canister create assets && sudo dfx deploy main`
-6. `npm run generate-declarations`
-7. `node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) ./arg.json`
-8. Open the **package.json** file, delete the code on line 31 `"type": "module"`, and save the file.
-9. View locally using `vite serve` 
+1. backend
+
+    1. `dfx deploy main --argument $(printf '%s' $(cat arg.json)) --upgrade-unchanged`
+
+1. frontend
+
+    1. Start the development server using `dfx deploy assets`
+    1. View locally using `vite serve`
