@@ -24,10 +24,8 @@ Claim your Kinic Tokens using your Internet Identity Principal ID
 ### Deployment
 
 4. Start the development server using `sudo dfx start`
-5. Start the development server using `sudo dfx deploy`
-6. View locally using `vite serve`
-
-### Deploy canister
-1. `dfx start --clean --background && dfx canister create assets && dfx deploy main`
-1. `npm run generate-declarations`
-1. `node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) ./arg.json`
+5. Create and deploy the main canister using `sudo dfx canister create assets && sudo dfx deploy main`
+6. `npm run generate-declarations`
+7. `node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) ./arg.json`
+8. Open the **package.json** file, delete the code on line 31 `"type": "module"`, and save the file.
+9. View locally using `vite serve` 
