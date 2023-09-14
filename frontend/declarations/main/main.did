@@ -1,0 +1,7 @@
+type SubAccount = vec nat8;
+type RegistryII = 
+ service {
+   register: (opt SubAccount, text) -> () oneway;
+   show: () -> (text) query;
+ };
+service : (text) -> RegistryII

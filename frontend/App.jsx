@@ -5,14 +5,14 @@ import { createClient } from "@connect2ic/core";
 import { AstroX } from "@connect2ic/core/providers/astrox";
 import { InfinityWallet } from "@connect2ic/core/providers";
 import { PlugWallet } from "@connect2ic/core/providers/plug-wallet";
-import { StoicWallet  } from "@connect2ic/core/providers";
+import { StoicWallet } from "@connect2ic/core/providers";
 import { NFID } from "@connect2ic/core/providers/nfid";
 import { Principal } from "@dfinity/principal";
 import { getCrc32 } from "@dfinity/principal/lib/cjs/utils/getCrc.js";
 import { sha224 } from "@dfinity/principal/lib/cjs/utils/sha224.js";
 import { Buffer } from 'buffer';
 
-import * as main from "canisters/main";
+import * as main from "./declarations/main";
 // import { HttpAgent } from "@dfinity/agent";
 // import { createActor } from "../../src/declarations/main/index.js"; // Need to commentout "export const main = createActor(canisterId);" in this file.
 
@@ -34,15 +34,15 @@ function App() {
   const [selectedAccount, setSelectedAccount] = useState("");
   // const authClient = AuthClient.create();
 
-  const [mainCanister, { loading, error }] = useCanister("main",  { mode: "connected" });
+  const [mainCanister, { loading, error }] = useCanister("main", { mode: "connected" });
   // console.log(loading, error)
 
   const { principal, isConnecting, connect, activeProvider } = useConnect({
     onConnect: () => {
-        setIsLoggedIn(true);
+      setIsLoggedIn(true);
     },
     onDisconnect: () => {
-        setIsLoggedIn(false);
+      setIsLoggedIn(false);
     }
   });
 
@@ -76,7 +76,7 @@ function App() {
   const accountOfPrincipal = (principal, subaccount) => {
     let accountNumber = accountIdentifierFromSubaccount(
       Buffer.from(principal.toUint8Array()),
-      Buffer.from([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,subaccount])
+      Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, subaccount])
     );
     return accountNumber;
   };
@@ -108,7 +108,7 @@ function App() {
       alert("Please enter a valid principal in the correct format.");
       return;
     } else {
-      let sub = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,selectedOption]]
+      let sub = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, selectedOption]]
       try {
         let register = await mainCanister.register(sub, iiPrincipalID);
         alert("Your NFT has been claimed. The II principal ID that you gave will be added to the SNS launch config.");
@@ -124,25 +124,25 @@ function App() {
   return (
     <div className="App">
       <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen" id="kani"></div>
-          <div className="auth-section">
-            <ConnectButton/>
-          </div>
-          <ConnectDialog />
-          <Form
-            iiPrincipalID={iiPrincipalID}
-            setIIPrincipalID={setIIPrincipalID}
-            claimTokens={claimTokens}
-            isLoggedIn={isLoggedIn}
-            accountNbr_0={accountNbr_0}
-            accountNbr_1={accountNbr_1}
-            accountNbr_2={accountNbr_2}
-            accountNbr_3={accountNbr_3}
-            accountNbr_4={accountNbr_4}
-            principalID={principalID}
-            handleAccountChange={handleAccountChange}
-            selectedAccount={selectedAccount}
-            setSelectedAccount={setSelectedAccount}
-          />
+      <div className="auth-section">
+        <ConnectButton />
+      </div>
+      <ConnectDialog />
+      <Form
+        iiPrincipalID={iiPrincipalID}
+        setIIPrincipalID={setIIPrincipalID}
+        claimTokens={claimTokens}
+        isLoggedIn={isLoggedIn}
+        accountNbr_0={accountNbr_0}
+        accountNbr_1={accountNbr_1}
+        accountNbr_2={accountNbr_2}
+        accountNbr_3={accountNbr_3}
+        accountNbr_4={accountNbr_4}
+        principalID={principalID}
+        handleAccountChange={handleAccountChange}
+        selectedAccount={selectedAccount}
+        setSelectedAccount={setSelectedAccount}
+      />
     </div>
   )
 }
@@ -176,8 +176,8 @@ const client = createClient({
   },
 })
 
-export default ({authClient}) => (
+export default ({ authClient }) => (
   <Connect2ICProvider client={client}>
-    <App/>
+    <App />
   </Connect2ICProvider>
 )
