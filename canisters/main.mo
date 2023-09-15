@@ -1,5 +1,5 @@
-// vessel installs
-import AccountId "mo:AccountId/AccountIdentifier";
+// vessel installsimport AccountId "mo:AccountId/AccountIdentifier";
+
 import JSON "mo:json/JSON";
 
 import Debug "mo:base/Debug";
@@ -8,73 +8,69 @@ import Principal "mo:base/Principal";
 import Buffer "mo:base/Buffer";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
+import Result "mo:base/Result";
+import Time "mo:base/Time";
+import Text "mo:base/Text";
+import ExtCore "./motoko/ext/Core";
+import ExtCommon "./motoko/ext/Common";
 
+//  - getUserTokenIds - use token holder AID (frontend) to obtain tokenIds from  tokens_ext (backend), it should return multiple token ids if user has multiple NFTs
+//  - isClaimed - get claimed status, tracked in backend by tokenId.
+//  - getTier  - getTokens has metadata blob its a query of all, consider storing data. Query data from tokenId and deliver a multiplier for all tokens where isClaimed is false.
+//  - Canister has a subaccount that can send/hold mod tokens.
+//  - airdrop - intakes a principal and AID. AID is used to perform validations and reward calculations. Principal is used to send tokens to.
 
-// node scripts/upload/uploader.js $(dfx canister id main) $(dfx identity whoami) /Users/clankpan/Develop/ICME/SNS/NFT-claim-page/arg.json
-shared ({ caller = installer }) actor class RegistryII(arg: Text){
+actor Airdrop {
 
+  type AccountId = ExtCore.AccountIdentifier;
+  type TokenId = Nat;
+  type Tier = Nat;
+  type Token = { id : TokenId; tier : Tier; claimed : Bool };
+  type Tokens = [Token];
+  type MetadataLegacy = ExtCommon.Metadata;
+  type TokenIndex = ExtCore.TokenIndex;
+  type Time = Time.Time;
+  type CommonError = ExtCore.CommonError;
+  type nftObj = {
+    tokenId : TokenId;
+    metadata : MetadataLegacy;
+    claimed : Bool
+  };
+  type Listing = {
+    seller : Principal;
+    price : Nat64;
+    locked : ?Time
+  };
 
-  // type Registry = (AccountId.AccountIdentifier, ?Principal);
-  // // var registryII = Buffer.Buffer<(AccountId.AccountIdentifier, ?Principal)>(150);
-  // stable var registryII: [var Registry] = [];
+  let nftActor = actor ("asrmz-lmaaa-aaaaa-qaaeq-cai") : actor {
+    getTokens : () -> async [(ExtCore.TokenIndex, MetadataLegacy)];
+    tokens_ext : (AccountId) -> async Result.Result<[(TokenIndex, ?Listing, ?Blob)], CommonError>
+  };
 
-  type AccountId = AccountId.AccountIdentifier;
-  type Value = {#P: Principal; #N};
-  type Key = AccountId;
-  stable var entries: [(Key, Value)] = [];
+  let maxHashmapSize = 1000000;
+  func isEq(x : Text, y : Text) : Bool { x == y };
 
-  // Parse JSON
-  switch (JSON.parse(arg)) {
-    case (?#Array array) {
-      // if deploy arg is not null, reset registry
-    if (array.size() != 150) Debug.trap "NFT holders must be under 150";
-    entries := Array.map<JSON.JSON, (Key, Value)>(array, func(e) {
-      let aId = switch (e) {
-        case (#String s) switch (AccountId.fromText(s)) {
-          case (#ok  v) v;
-          case (#err _) Debug.trap "Cannot convert AccountIdentifier";
-        };
-        case _ Debug.trap "Second level must be string";
+  //stable var admins : List.List<Text> = List.nil<Text>();
+  stable var nftsByIdsEntries : [(Text, Text)] = [];
+  var nftsByIdsHashMap = HashMap.fromIter<Text, Text>(nftsByIdsEntries.vals(), maxHashmapSize, isEq, Text.hash);
+
+  public shared func getUserTokenIds(accountId : AccountId) : async Result.Result<[(TokenIndex, ?Listing, ?Blob)], CommonError> {
+    //check principal against isOwner or smth like that
+
+    let tokens = await nftActor.tokens_ext(accountId);
+
+    switch (tokens) {
+      case (#ok(tokens)) {
+        Debug.print(debug_show (tokens));
+        #ok(tokens)
       };
+      case (#err(err)) {
+        Debug.print("Error getting tokens: ");
+        #err(err)
+      }
 
-      (aId, #N)
-    });
-    Debug.print "Reset current registry";
     };
-    case (?#Null) Debug.print "Not reset current registry"; // Not reset current registry
-    case _ Debug.trap "Must be array"
-  };
-  let registry = HashMap.fromIter<Key, Value>(entries.vals(), 150, AccountId.equal, AccountId.hash);
 
-  system func postupgrade() {
-    entries := Iter.toArray(registry.entries());
   };
 
-  public shared({caller = caller}) func register(subaccount: ?AccountId.SubAccount, ii: Text) {
-    if (Principal.isAnonymous(caller)) Debug.trap "You are anonymos";
-    let aId = AccountId.fromPrincipal(caller, subaccount);
-    switch (registry.get(aId)) {
-      case (?_) registry.put(aId, #P(Principal.fromText(ii)));
-      case null Debug.trap "You have logged in with the wrong wallet or put in the wrong Subaccount."
-    };
-    Debug.print("Success!: " # AccountId.toText(aId));
-  };
-
-  public shared query({caller = caller}) func show(): async Text {
-    if (caller != installer) Debug.trap "Not authorised";
-    if (Principal.isAnonymous(caller)) Debug.trap "Not authorised";
-
-    JSON.show(#Object(
-      Array.map<(Key, Value), (Text, JSON.JSON)>(
-        Iter.toArray(registry.entries()), // from
-        func((aId, value)) {
-          let ii = switch (value) {
-            case (#P(p)) #String(Principal.toText(p));
-            case (#N) #Null;
-          };
-          (AccountId.toText(aId), ii); // to
-    })));
-  };
-
-  // dfx deploy main --argument $(printf '%s' $(cat test/arg.json)) --upgrade-unchanged
-};
+}
